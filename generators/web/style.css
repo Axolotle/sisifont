@@ -1,0 +1,45 @@
+:root {
+    font-size: 95%;
+    line-height: 1.2rem;
+}
+* {
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: 'Hack';
+}
+
+body {
+    width: 80%;
+    margin: auto;
+    margin-top: 3rem;
+}
+
+h1 {
+    background-color: black;
+    color: white;
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+#input {
+    background-color: yellow;
+    height: 18rem;
+    overflow: auto;
+    padding: 1rem;
+    font-style: italic;
+}
+
+#output {
+    min-height: 25rem;
+}
+
+.whitespace {
+    white-space: pre;
+}
