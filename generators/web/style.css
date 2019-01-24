@@ -1,5 +1,5 @@
 :root {
-    font-size: 95%;
+    font-size: 85%;
     line-height: 1.2rem;
 }
 * {
@@ -25,7 +25,7 @@ h1 {
     color: white;
     display: inline-block;
     margin-top: 2rem;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
 }
 
 #input {
@@ -37,7 +37,8 @@ h1 {
 }
 
 #output {
-    min-height: 25rem;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
 }
 
 .whitespace {
