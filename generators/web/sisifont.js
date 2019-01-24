@@ -11,19 +11,25 @@
 init();
 
 function init() {
+    // set base max-width from screen size
+    document.getElementById('max-width').value = getMaxWidthInGlyphs();
+
+    // input text events
     var input = document.getElementById('input');
-    input.oninput = function () {
-        convert(this.innerText.split(String.fromCharCode(10)));
-    };
+    input.oninput = convert;
     input.onclick = function () {
         if (this.textContent === 'Write something here.')
             this.textContent = '';
     };
 
+    // options events
+    var opts = document.getElementsByTagName('input');
+    opts[0].oninput = opts[1].onclick = opts[2].onclick = convert;
+
     displaySpecimen();
 }
 
-function textToFont(text) {
+function textToFont(text, overlap) {
     var font = [
         '                                                                                                                                                                                                                                                                                                                                                                                                                           ╭─╮            ╭─╮╶─╴ ○    ╶╮ ╶╮                 ╮ ╭╮                 \\  /  ^  ~ · · ○        \\  /  ^ · · \\  /  ^ · ·    ~  \\  /  ^  ~ · ·       \\  /  ^ · · /                                                                                                       ',
         '    ╷  ││ ┼┼╭┼╴ ○ ╭╮  │  ╭╯╰╮ ┬┴┬              /╭─╮╶╮ ╶─╮╶─╮╷  ┌─╴╭─╴╶─┐╭─╮╭─╮               ╶─╮╭─╮╭─┐┌─╮╭─╴┌─╮┌─╴┌─╴╭─╮╷ ╷╶┬╴  ╷╷ ╭╷  ╭╮╮╭╮╷╭─╮┌─╮╭─╮┌─╮╭─╴╶┬╴╷ ╷╷ ╷╷╷╷╷ ╷╷ ╷╶─╮ ┌╴\\  ╶┐  ^     \\    ╷       ╷    ╭╴   ╷   ╷  ╷ ╷  ╶┐                       ╷                    ╭╯ │ ╰╮                                                                                                                 ╭╮ ╷ ╷ ╷ ╷ ╭─╮· ·│╭│╶╮          │╭│         ╭╯  ┤  ╯    ╭┬┬       │ ││    ┌┬┐┌─┐┌─┐   ╭─┐╭─┐╭─┐╭─┐╭─┐╭─┐╭┬╴╭─╴┌─╴┌─╴┌─╴┌─╴╶┬╴╶┬╴╶┬╴╶┬╴┌─╮╭╮╷╭─╮╭─╮╭─╮╭─╮╭─╮   ╭─/╷ ╷╷ ╷╷ ╷╷ ╷╷ ╷├─╮┌─╮ \\  /  ^  ~ · · ○        \\  /  ^ · · \\  /  ^ · · ╶┤ ~  \\  /  ^  ~ · · ·     \\  /  ^ · · /    · ·',
@@ -42,16 +48,36 @@ function textToFont(text) {
                 tempLine[j] += font[j][pos] + font[j][pos+1] + font[j][pos+2]
             }
         }
-        result.push(...tempLine);
+        // merge first line with previous last one if overlapping is enabled
+        if (overlap && result.length > 2 && tempLine[0] !== '') {
+            let [first, ...rest] = tempLine;
+            let last = result[result.length-1];
+            let mergedLine = '';
+            for (let i = 0; i < first.length; i++) {
+                if (first[i] != ' ' || last[i] === undefined) {
+                    mergedLine += first[i];
+                } else {
+                    mergedLine += last[i];
+                }
+            }
+            if (last.length > first.length) {
+                mergedLine += last.slice(first.length);
+            }
+            result[result.length-1] = mergedLine;
+            result.push(...rest);
+        } else {
+            result.push(...tempLine);
+        }
     });
 
     return result;
 }
 
-function format(text, width) {
+function format(text, width, upperCase) {
     var result = [];
     text.forEach(line => {
-        line = line.replace('’', '\'').replace('Œ', 'OE').replace('œ', 'oe')
+        line = line.replace('’', '\'').replace('Œ', 'OE').replace('œ', 'oe');
+        if (upperCase) line = line.toUpperCase();
         while (line.length > width) {
             let index = line.lastIndexOf(' ', width);
             if (index === -1) index = line.indexOf(' ');
@@ -83,9 +109,21 @@ function getMaxWidthInGlyphs() {
 }
 
 function convert(text) {
+    if (!Array.isArray(text)) {
+        text = document.getElementById('input').innerText.split(String.fromCharCode(10));
+    }
+
+    let options = document.getElementsByTagName('input');
+    let opt = {
+        maxWidth: options[0].valueAsNumber,
+        upperCase: options[1].checked,
+        overlap: options[2].checked
+    };
+
     display(
         textToFont(
-            format(text, getMaxWidthInGlyphs())
+            format(text, opt.maxWidth, opt.upperCase),
+            opt.overlap
         )
     );
 }

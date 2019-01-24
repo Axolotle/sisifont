@@ -17,7 +17,23 @@
     </header>
     <main>
         <h1>Text to Sisifont converter</h1>
-        <section id="input" contenteditable="true">Write something here.</section>
+        <section id="top">
+            <div id="input" contenteditable="true">Write something here.</div>
+            <div id="options">
+                <div class="option">
+                    <label for="max-width">max-width:</label>
+                    <input id="max-width" type="number" name="max-width" value="0">
+                </div>
+                <div class="option">
+                    <input id="uppercase" type="checkbox">
+                    <label for="uppercase">uppercase</label>
+                </div>
+                <div class="option">
+                    <input id="line-heigth" type="checkbox">
+                    <label for="line-heigth">line-height -1</label>
+                </div>
+            </div>
+        </section>
 
         <section id="output" class="whitespace"></section>
     </main>
