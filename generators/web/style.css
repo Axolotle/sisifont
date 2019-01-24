@@ -9,6 +9,7 @@
     font-family: 'Hack';
     margin: 0;
     padding: 0;
+    outline: none;
 }
 input[type=number] {
   -moz-appearance: textfield;
@@ -22,8 +23,12 @@ input[type=number]::-webkit-outer-spin-button {
 
 body {
     width: 80%;
+    max-width: 1500px;
     margin: auto;
     margin-top: 3rem;
+}
+footer {
+    margin-bottom: 1rem;
 }
 
 h1 {
@@ -45,6 +50,7 @@ h1 {
     overflow: auto;
     padding: 1rem;
     font-style: italic;
+    box-sizing: border-box;
 }
 
 #output {
@@ -55,6 +61,16 @@ h1 {
 #options {
     margin-left: 1rem;
     min-width: 12rem;
+}
+@media (max-width: 600px) {
+    #top {
+        flex-direction: column;
+    }
+    #options {
+        margin-left: 0;
+        padding: 1rem;
+        width: 100%;
+    }
 }
 
 .option {
@@ -113,4 +129,26 @@ h1 {
 [type="checkbox"]:checked + label:after {
     opacity: 1;
     transform: scale(1);
+}
+
+[type="button"] {
+    border: 1px solid black;
+    padding: 2px .5rem;
+    background-color: white;
+    color: black;
+
+}
+[type="button"]:hover, [type="button"]:focus {
+    cursor: pointer;
+    outline: none;
+    background-color: yellow;
+}
+[type="button"]::-moz-focus-inner {
+   border: 0;
+}
+
+
+::-moz-selection, ::selection {
+    background-color: black;
+    color: white;
 }

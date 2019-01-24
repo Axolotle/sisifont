@@ -25,6 +25,21 @@ function init() {
     // options events
     var opts = document.getElementsByTagName('input');
     opts[0].oninput = opts[1].onclick = opts[2].onclick = convert;
+    var buttons = document.getElementsByTagName('button');
+    buttons[0].onclick = function select() {
+        if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(document.getElementById('output'));
+            range.select();
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById('output'));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+        }
+    };
+    buttons[1].onclick = displaySpecimen;
+
 
     displaySpecimen();
 }
@@ -111,6 +126,9 @@ function getMaxWidthInGlyphs() {
 function convert(text) {
     if (!Array.isArray(text)) {
         text = document.getElementById('input').innerText.split(String.fromCharCode(10));
+    }
+    if (text.length === 1 && (text[0] === 'Write something here.' || text[0] === '')) {
+        return displaySpecimen();
     }
 
     let options = document.getElementsByTagName('input');
